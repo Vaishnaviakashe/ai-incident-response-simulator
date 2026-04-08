@@ -180,6 +180,11 @@
 
 # if __name__ == "__main__":
 #     main()
+# 
+from fastapi import FastAPI
+from pydantic import BaseModel
+import uvicorn
+
 
 
 from env.environment import IncidentResponseEnv, Action
@@ -205,3 +210,20 @@ def step(action: str):
         "done": bool(done),
         "info": str(info)
     }
+    
+
+app = FastAPI()
+
+class ActionInput(BaseModel):
+    action: str
+
+@app.post("/reset")
+def api_reset():
+    return reset()
+
+@app.post("/step")
+def api_step(input: ActionInput):
+    return step(input.action)
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=7860)
