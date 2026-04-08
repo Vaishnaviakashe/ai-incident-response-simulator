@@ -1,96 +1,44 @@
-# from env.environment import IncidentResponseEnv, Action
-# from fastapi import FastAPI
-# from pydantic import BaseModel
-# from fastapi.responses import JSONResponse
-# import uvicorn
+import os
 
-# env = IncidentResponseEnv()
-# app = FastAPI()
-
-# class ActionInput(BaseModel):
-#     action: str
-
-# @app.get("/")
-# def root():
-#     return {"message": "API is running"}
-
-# @app.post("/")
-# def root_post():
-#     obs = env.reset()
-#     return {
-#         "observation": str(obs.incident_description),
-#         "info": str(obs.instructions)
-#     }
-
-# @app.post("/reset")
-# def api_reset():
-#     obs = env.reset()
-#     return {
-#         "observation": str(obs.incident_description),
-#         "info": str(obs.instructions)
-#     }
-
-# def reset():
-#     obs = env.reset()
-
-#     return {
-#         "observation": obs.incident_description,
-#         "info": obs.instructions
-#     }
-    
-# @app.post("/step")
-# def api_step(input: ActionInput):
-#     action_obj = Action(content=input.action)
-#     obs, reward, done, info = env.step(action_obj)
-
-#     return {
-#         "observation": str(obs.incident_description),
-#         "reward": float(reward),
-#         "done": bool(done),
-#         "info": str(info)
-#     }
-
-# if __name__ == "__main__":
-#     # uvicorn.run(app, host="0.0.0.0", port=7860)
-#     uvicorn.run(app, host="0.0.0.0", port=7860, log_level="info")
-
-from env.environment import IncidentResponseEnv, Action
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel
+from env.environment import IncidentResponseEnv, Action
 import uvicorn
 
-env = IncidentResponseEnv()
 app = FastAPI()
+env = IncidentResponseEnv()
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 class ActionInput(BaseModel):
     action: str
 
+# 1. Catch-all for the ROOT (GET and POST)
 @app.get("/")
-def root():
-    return {"message": "API is running"}
+async def root():
+    return {"status": "alive", "message": "OpenEnv API"}
 
-# The checker often POSTs to the root to trigger a reset
 @app.post("/")
-def root_post():
+async def root_post():
     obs = env.reset()
     return {
         "observation": str(obs.incident_description),
         "info": str(obs.instructions)
     }
 
+# 2. Specific RESET endpoint
 @app.post("/reset")
-def api_reset():
+async def api_reset():
     obs = env.reset()
     return {
         "observation": str(obs.incident_description),
         "info": str(obs.instructions)
     }
 
+# 3. STEP endpoint
 @app.post("/step")
-def api_step(input: ActionInput):
+async def api_step(input: ActionInput):
     action_obj = Action(content=input.action)
     obs, reward, done, info = env.step(action_obj)
-
     return {
         "observation": str(obs.incident_description),
         "reward": float(reward),
@@ -99,5 +47,4 @@ def api_step(input: ActionInput):
     }
 
 if __name__ == "__main__":
-    # Ensure port is exactly 7860 for HuggingFace/OpenEnv
     uvicorn.run(app, host="0.0.0.0", port=7860)

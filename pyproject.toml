@@ -1,0 +1,16 @@
+[project]
+name = "ai-incident-response-simulator"
+version = "0.1.0"
+description = "AI Incident Response Environment for OpenEnv"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+    "requests"
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
