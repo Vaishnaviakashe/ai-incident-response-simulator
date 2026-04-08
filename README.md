@@ -1,14 +1,12 @@
 <<<<<<< HEAD
 ---
-title: Ai Incident Response Env
-emoji: 🐨
+title: AI Incident Response Env
+emoji: 🚨
 colorFrom: red
-colorTo: green
-sdk: gradio
-sdk_version: 6.11.0
-app_file: app.py
+colorTo: blue
+sdk: docker
+app_file: inference.py
 pinned: false
-license: mit
 ---
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
