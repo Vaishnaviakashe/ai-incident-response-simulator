@@ -8,8 +8,13 @@ dependencies = [
     "fastapi",
     "uvicorn",
     "pydantic",
-    "requests"
+    "gradio",
+    "openai",
+    "openenv-core>=0.2.0"  # This was specifically requested in your error
 ]
+
+[project.scripts]
+server = "server.app:build_ui" # This defines the [project.scripts] server entry point
 
 [build-system]
 requires = ["setuptools>=61.0"]
