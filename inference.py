@@ -10,10 +10,17 @@ app = FastAPI()
 class ActionInput(BaseModel):
     action: str
 
-# ✅ ROOT FIX (VERY IMPORTANT)
 @app.get("/")
 def root():
     return {"message": "API is running"}
+
+@app.post("/")
+def root_post():
+    obs = env.reset()
+    return {
+        "observation": str(obs.incident_description),
+        "info": str(obs.instructions)
+    }
 
 @app.post("/reset")
 def api_reset():
