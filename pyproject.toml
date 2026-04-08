@@ -13,8 +13,9 @@ dependencies = [
     "openenv-core>=0.2.0"  # This was specifically requested in your error
 ]
 
+
 [project.scripts]
-server = "server.app:build_ui" # This defines the [project.scripts] server entry point
+server = "server.app:main"  # Changed from build_ui to main
 
 [build-system]
 requires = ["setuptools>=61.0"]
