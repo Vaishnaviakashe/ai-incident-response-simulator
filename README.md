@@ -5,10 +5,9 @@ emoji: 🚨
 colorFrom: red
 colorTo: blue
 sdk: docker
-app_file: inference.py
-pinned: false
 ---
 
+# OpenEnv Hackathon Submission
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
 =======
 # ai-incident-response-simulator
