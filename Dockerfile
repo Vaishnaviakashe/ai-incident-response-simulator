@@ -50,7 +50,7 @@ ENV MODEL_NAME="Qwen/Qwen2.5-72B-Instruct"
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
 
-EXPOSE 8000
+EXPOSE 7860
 
 # Run Gradio dashboard (HF Spaces) — inference.py still works standalone
 CMD ["python", "inference.py"]
