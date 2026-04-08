@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 class ActionInput(BaseModel):
     action: str
 
-@app.post("/")
+@app.post("/reset")
 def api_reset():
     obs = env.reset()
     return JSONResponse({
