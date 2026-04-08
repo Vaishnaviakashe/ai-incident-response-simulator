@@ -1,0 +1,80 @@
+name: incident-response-env
+version: "1.0.0"
+description: >
+  A real-world RL environment simulating AI-assisted cybercrime and legal
+  incident response. An agent must classify incidents, map applicable laws,
+  and produce structured remediation plans across three tasks of increasing
+  difficulty.
+
+tags:
+  - openenv
+  - cybersecurity
+  - legal
+  - incident-response
+  - nlp
+  - structured-output
+
+author: "OpenEnv Hackathon Submission"
+
+tasks:
+  - id: task_1_classify
+    name: incident-classification
+    difficulty: easy
+    description: >
+      Given a cyber incident description, classify it into a single
+      category (e.g., phishing, ransomware, financial_fraud).
+    max_steps: 3
+    reward_range: [0.0, 1.0]
+
+  - id: task_2_laws
+    name: law-mapping
+    difficulty: medium
+    description: >
+      Given a data breach scenario involving multiple jurisdictions,
+      identify all applicable laws and regulations (multi-label).
+    max_steps: 3
+    reward_range: [0.0, 1.0]
+
+  - id: task_3_response
+    name: structured-response
+    difficulty: hard
+    description: >
+      Given a complex ransomware + healthcare data breach scenario,
+      produce a complete JSON incident response plan with incident_type,
+      laws, actions, and severity.
+    max_steps: 5
+    reward_range: [0.0, 1.0]
+
+observation_space:
+  type: object
+  fields:
+    task_id: string
+    task_name: string
+    difficulty: "easy | medium | hard"
+    incident_description: string
+    context: object
+    step: integer
+    max_steps: integer
+    instructions: string
+
+action_space:
+  type: object
+  fields:
+    content: string  # Free-form text or JSON string from agent
+
+reward:
+  type: float
+  range: [0.0, 1.0]
+  notes: >
+    Incremental reward at each step. Partial credit awarded for
+    correct sub-components (classification, law identification,
+    structured output fields). Penalties applied for wrong answers,
+    empty responses, and harmful actions.
+
+entry_point: "env.environment:IncidentResponseEnv"
+inference_script: "inference.py"
+
+runtime:
+  python: ">=3.10"
+  memory_limit: "8GB"
+  cpu_limit: 2
