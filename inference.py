@@ -23,12 +23,12 @@ def root_post():
     }
 
 @app.post("/reset")
-# def api_reset():
-#     obs = env.reset()
-#     return {
-#         "observation": str(obs.incident_description),
-#         "info": str(obs.instructions)
-#     }
+def api_reset():
+    obs = env.reset()
+    return {
+        "observation": str(obs.incident_description),
+        "info": str(obs.instructions)
+    }
 
 def reset():
     obs = env.reset()
@@ -39,25 +39,14 @@ def reset():
     }
     
 @app.post("/step")
-# def api_step(input: ActionInput):
-#     action_obj = Action(content=input.action)
-#     obs, reward, done, info = env.step(action_obj)
-
-#     return {
-#         "observation": str(obs.incident_description),
-#         "reward": float(reward),
-#         "done": bool(done),
-#         "info": str(info)
-#     }
-
-def step(action: str):
-    action_obj = Action(content=action)
+def api_step(input: ActionInput):
+    action_obj = Action(content=input.action)
     obs, reward, done, info = env.step(action_obj)
 
     return {
-        "observation": obs.incident_description,
-        "reward": reward,
-        "done": done,
+        "observation": str(obs.incident_description),
+        "reward": float(reward),
+        "done": bool(done),
         "info": str(info)
     }
 
