@@ -53,4 +53,4 @@ ENV PYTHONPATH=/app
 EXPOSE 7860
 
 # Run Gradio dashboard (HF Spaces) — inference.py still works standalone
-CMD ["python", "app.py"]
+CMD ["python", "inference.py"]
