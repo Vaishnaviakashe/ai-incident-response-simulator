@@ -247,14 +247,53 @@ def _get_scenario_info(task) -> str:
     )
 
 
+# def main():
+#     """
+#     Main entry point for the OpenEnv validator.
+#     """
+#     demo = build_ui()
+#     # demo.launch(server_name="127.0.0.1", server_port=7860)
+    
+#     demo.launch(server_name="0.0.0.0", server_port=7860)
+    
+# if __name__ == "__main__":
+#     main()
+
 def main():
     """
     Main entry point for the OpenEnv validator.
+    Runs tasks to generate logs, then starts the UI.
     """
+    # 1. Run the tasks first so the validator sees the logs immediately
+    print("--- STARTING EVALUATION TASKS ---", flush=True)
+    run_eval_tasks()
+    print("--- EVALUATION TASKS COMPLETE ---", flush=True)
+
+    # 2. Launch the UI to keep the container alive for the validator
     demo = build_ui()
-    # demo.launch(server_name="127.0.0.1", server_port=7860)
-    
     demo.launch(server_name="0.0.0.0", server_port=7860)
+
+def run_eval_tasks():
+    # We use a simple version of your inference logic here
+    # to ensure it uses the actual Environment
+    from env.environment import IncidentResponseEnv, Action
     
+    tasks_to_run = ["task_1_classify", "task_2_laws", "task_3_response"]
+    
+    for task_name in tasks_to_run:
+        print(f"[START] task={task_name}", flush=True)
+        try:
+            env = IncidentResponseEnv(task_id=task_name)
+            obs = env.reset()
+            # Placeholder action - Replace "analyze incident" with actual LLM call 
+            # if you want a score higher than 0!
+            action = Action(content="analyze incident") 
+            obs, reward, done, info = env.step(action)
+            
+            print(f"[STEP] step=1 reward={reward}", flush=True)
+            print(f"[END] task={task_name} score={reward} steps=1", flush=True)
+        except Exception as e:
+            print(f"[END] task={task_name} score=0 steps=0 error={str(e)}", flush=True)
+
 if __name__ == "__main__":
     main()
