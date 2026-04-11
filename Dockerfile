@@ -17,7 +17,7 @@ COPY . .
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=$PYTHONPATH:/app/server:/app
 ENV API_BASE_URL="https://router.huggingface.co/v1"
 ENV MODEL_NAME="Qwen/Qwen2.5-72B-Instruct"
 ENV HF_TOKEN=""
