@@ -247,18 +247,6 @@ def _get_scenario_info(task) -> str:
     )
 
 
-# def main():
-#     """
-#     Main entry point for the OpenEnv validator.
-#     """
-#     demo = build_ui()
-#     # demo.launch(server_name="127.0.0.1", server_port=7860)
-    
-#     demo.launch(server_name="0.0.0.0", server_port=7860)
-    
-# if __name__ == "__main__":
-#     main()
-
 def main():
     """
     Main entry point for the OpenEnv validator.
@@ -285,9 +273,17 @@ def run_eval_tasks():
         try:
             env = IncidentResponseEnv(task_id=task_name)
             obs = env.reset()
-            # Placeholder action - Replace "analyze incident" with actual LLM call 
-            # if you want a score higher than 0!
-            action = Action(content="analyze incident") 
+            
+            # 1. Create the prompt for the AI
+            user_prompt = f"=== INCIDENT REPORT ===\n{obs.incident_description}\n\n=== YOUR TASK ===\n{obs.instructions}"
+            system_prompt = "You are a cybersecurity expert. Respond strictly according to the instructions."
+            
+            # 2. Get the ACTUAL answer from your AI
+            client = get_client() # Use your helper function
+            answer = call_llm(client, system_prompt, user_prompt)
+            
+            # 3. Send the AI's answer to the environment
+            action = Action(content=answer) 
             obs, reward, done, info = env.step(action)
             
             print(f"[STEP] step=1 reward={reward}", flush=True)
