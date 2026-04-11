@@ -27,5 +27,5 @@ ENV HF_TOKEN=""
 EXPOSE 7860
 
 # Run using the module path to avoid import errors
-# CMD ["uvicorn", "inference:app", "--host", "0.0.0.0", "--port", "7860"]
-CMD ["python", "server/app.py"]
+CMD ["uvicorn", "inference:app", "--host", "0.0.0.0", "--port", "7860"]
+# CMD ["python", "server/app.py"]

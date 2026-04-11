@@ -252,13 +252,15 @@ def main():
     Main entry point for the OpenEnv validator.
     Runs tasks to generate logs, then starts the UI.
     """
+    
+    demo = build_ui()
+
     # 1. Run the tasks first so the validator sees the logs immediately
     print("--- STARTING EVALUATION TASKS ---", flush=True)
     run_eval_tasks()
     print("--- EVALUATION TASKS COMPLETE ---", flush=True)
 
     # 2. Launch the UI to keep the container alive for the validator
-    demo = build_ui()
     demo.launch(server_name="0.0.0.0", server_port=7860)
 
 def run_eval_tasks():
