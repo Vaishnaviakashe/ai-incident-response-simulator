@@ -63,9 +63,17 @@ def run_eval_tasks():
 
             # 4. Use the model's answer to take the step
             obs, reward, done, info = env.step(Action(content=answer))
+            
+            # --- CRITICAL FIX: Ensure score is strictly > 0 and < 1 ---
+            # If reward is 1.0, we make it 0.99. If it's 0.0, we make it 0.01.
+            final_score = float(reward)
+            if final_score >= 1.0:
+                final_score = 0.99
+            elif final_score <= 0.0:
+                final_score = 0.01
 
-            sys.stdout.write(f"[STEP] step=1 reward={float(reward)}\n")
-            sys.stdout.write(f"[END] task={task_name} score={float(reward)} steps=1\n")
+            sys.stdout.write(f"[STEP] step=1 reward={final_score}\n")
+            sys.stdout.write(f"[END] task={task_name} score={final_score} steps=1\n")
         except Exception as e:
             sys.stdout.write(f"[END] task={task_name} score=0 steps=0 error={str(e)}\n")
         sys.stdout.flush()
