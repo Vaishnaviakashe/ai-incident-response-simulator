@@ -1,9 +1,14 @@
 import os
+import logging
 import gradio as gr
 from fastapi import FastAPI
 from pydantic import BaseModel
 from env.environment import IncidentResponseEnv, Action
 from server.app import build_ui 
+
+# Setup system-level logging to ensure stdout is captured
+logging.basicConfig(level=logging.INFO, format='%(message)s')
+logger = logging.getLogger("validator")
 
 app = FastAPI()
 env = IncidentResponseEnv()
@@ -16,8 +21,8 @@ class ActionInput(BaseModel):
 @app.post("/reset")
 async def api_reset():
     obs = env.reset()
-    # MANDATORY: flush=True ensures the validator sees this instantly
-    print(f"[START] task=incident_response", flush=True)
+    # Use logger.info to force output into the container's primary stdout stream
+    logger.info("[START] task=incident_response")
     return {"observation": str(obs.incident_description), "info": str(obs.instructions)}
 
 @app.post("/step")
@@ -25,11 +30,11 @@ async def api_step(input_data: ActionInput):
     action_obj = Action(content=input_data.action)
     obs, reward, done, info = env.step(action_obj)
     
-    # MANDATORY: Every log line must be flushed
-    print(f"[STEP] reward={reward}", flush=True)
+    # Precise formatting required by Phase 2 parsing
+    logger.info(f"[STEP] reward={reward}")
     
     if done:
-        print(f"[END] score={reward}", flush=True)
+        logger.info(f"[END] score={reward}")
         
     return {
         "observation": str(obs.incident_description), 
